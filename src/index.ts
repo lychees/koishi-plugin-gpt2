@@ -1,13 +1,13 @@
 import { Context, Dict, Logger, Session } from 'koishi'
 import { Config } from './config'
 import { MemoryDict } from './memory'
-import { getBasePrompts, getReply, getSummary, getTopic } from './prompt'
+import { getBasePrompts, getReply, getSummary, getTopic, query } from './prompt'
 
 export * from './config'
 export const reactive = true
-export const name = '@tomlbz/openai'
+export const name = 'gpt2'
 
-const logger = new Logger('@tomlbz/openai')
+const logger = new Logger('gpt2')
 const memory = new MemoryDict(0, 0, 0)
 memory.loadMemory()
 let textUpdates = 0
@@ -40,6 +40,9 @@ export function apply(ctx: Context, config: Config) {
     const input = session.content.replace(/<[^>]*>/g, '') // 去除XML元素
     if ( input === '' ) return next() // ignore empty message
     if (islog) logger.info(`condition ${condition} met, replying`)
+    const result = await query(input)
+    console.log(JSON.stringify(result))
+    return result.generated_text
     // get info from session
     const uid = session.uid
     const botname = config.botname

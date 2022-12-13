@@ -1,5 +1,5 @@
 {
-  "name": "@tomlbz/koishi-plugin-openai",
+  "name": "koishi-plugin-gpt2",
   "description": "Calls OpenAI language models for Koishi.js",
   "private": false,
   "version": "1.1.4",

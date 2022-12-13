@@ -2,6 +2,19 @@ import { MemoryDict } from './memory'
 import { Configuration, OpenAIApi} from "openai"
 import { Config } from './config'
 
+export async function query(data) {
+  const response = await fetch(
+    "https://api-inference.huggingface.co/models/microsoft/GODEL-v1_1-large-seq2seq",
+    {
+      headers: { Authorization: "Bearer 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" },
+      method: "POST",
+      body: JSON.stringify(data),
+    }
+  );
+  const result = await response.json();
+  return result;
+}
+
 export function getBasePrompts(uid: string, username: string, botname: string, botIdentity: string, memory: MemoryDict) {
     const aboutme = `#关于我：\n我叫${botname}，我的主人叫${username}。${botIdentity}\n`
     const textMemory = memory.getTextMemory(uid)
@@ -23,6 +36,9 @@ export function getBasePrompts(uid: string, username: string, botname: string, b
 }
 
 export async function getReply(bprompts: string[], username: string, input: string, config: Config, isdebug: boolean) {
+
+  
+
     const prompt = `${bprompts.join('')}\n${username}：${input}\n我：`
     if (isdebug) return prompt
     const configuration = new Configuration({
